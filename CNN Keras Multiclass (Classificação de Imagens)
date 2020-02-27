@@ -36,26 +36,23 @@ model.add(Dropout(0.5))
 model.add(Dense(4))
 model.add(Activation('softmax'))
 model.summary()
-
 model.compile(loss = 'categorical_crossentropy', optimizer = 'rmsprop', metrics = ['accuracy'])
-
 model.fit_generator(gerador_treino, steps_per_epoch=1000, epochs=50, validation_data=gerador_treino, validation_steps=50)
-
 model.sample_weights('weights.h5')
 
-img_teste = image,load_img('dataset/amostra_teste/normal.jpeg', target_size = (150, 150))
+img_teste = image.load_img('dataset/amostra_teste/normal.jpeg', target_size = (150, 150))
 img_teste = image.img_to_array(img_teste)
 img_teste = np.expand_dims(img_teste, axis = 0)
 
 resultado_teste = model.predict(img_teste)
 print(resultado_teste)
-if resultado[0][0] == 0:
+if resultado_teste[0][0] == 0:
     print('DERRAME PLEURAL')
-elif resultado[0][0] == 1:
+elif resultado_teste[0][0] == 1:
     print('NORMAL')
-elif resultado[0][0] == 2:
+elif resultado_teste[0][0] == 2:
     print('PNEUMONIA')
-elif resultado[0][0] == 3:
+elif resultado_teste[0][0] == 3:
     print('TUBERCULOSE')
 else:
     print('Resultado impreciso demais para ser considerado')
