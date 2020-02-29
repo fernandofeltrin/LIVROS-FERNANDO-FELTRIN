@@ -3,21 +3,31 @@ from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras import backend as B
-import numpy as numpy
+import numpy as np
 
-data_treino = 'dataset/train/'
-data_teste = 'dataset/test/'
+data_treino = 'C:/Users/Fernando/Desktop/CNNMINISET/dataset/train/'
+data_teste = 'C:/Users/Fernando/Desktop/CNNMINISET/dataset/test/'
 
 if B.image_data_format() == 'channels_first':
     input_shape = (3, 150, 150)
 else:
     input_shape = (150, 150, 3)
 
-data_gen_treino = ImageDataGenerator(rescale= 1. / 255, shear_range=0.2, zoom_range=0.2, horizontal_flip=True)
+data_gen_treino = ImageDataGenerator(rescale= 1. / 255,
+                                     shear_range=0.2,
+                                     zoom_range=0.2,
+                                     horizontal_flip=True)
 data_gen_teste = ImageDataGenerator(rescale=1. / 255)
 
-gerador_treino = data_gen_treino.flow_from_directory(data_treino, target_size=(150, 150),
-batch_size=20, class_mode='categorical')
+gerador_treino = data_gen_treino.flow_from_directory(data_treino,
+                                                     target_size=(150, 150),
+                                                     batch_size=20,
+                                                     class_mode='categorical')
+
+gerador_teste = data_gen_teste.flow_from_directory(data_teste,
+                                                     target_size=(150, 150),
+                                                     batch_size=20,
+                                                     class_mode='categorical')
 
 model = Sequential()
 model.add(Conv2D(32, (3,3), input_shape=input_shape))
@@ -36,23 +46,33 @@ model.add(Dropout(0.5))
 model.add(Dense(4))
 model.add(Activation('softmax'))
 model.summary()
-model.compile(loss = 'categorical_crossentropy', optimizer = 'rmsprop', metrics = ['accuracy'])
-model.fit_generator(gerador_treino, steps_per_epoch=1000, epochs=50, validation_data=gerador_treino, validation_steps=50)
-model.sample_weights('weights.h5')
+model.compile(loss = 'categorical_crossentropy',
+              optimizer = 'rmsprop',
+              metrics = ['accuracy'])
+model.fit_generator(gerador_treino,
+                    steps_per_epoch=100,
+                    epochs=10,
+                    validation_data=gerador_teste,
+                    validation_steps=50)
 
-img_teste = image.load_img('dataset/amostra_teste/normal.jpeg', target_size = (150, 150))
+model.save_weights('weights.h5')
+
+img_teste = image.load_img('C:/Users/Fernando/Desktop/CNNMINISET/dataset/amostra_teste/normal.jpeg',
+                           target_size = (150, 150))
 img_teste = image.img_to_array(img_teste)
-img_teste = np.expand_dims(img_teste, axis = 0)
+img_teste = np.expand_dims(img_teste,
+                           axis = 0)
 
 resultado_teste = model.predict(img_teste)
 print(resultado_teste)
-if resultado_teste[0][0] == 0:
-    print('DERRAME PLEURAL')
-elif resultado_teste[0][0] == 1:
-    print('NORMAL')
-elif resultado_teste[0][0] == 2:
-    print('PNEUMONIA')
-elif resultado_teste[0][0] == 3:
-    print('TUBERCULOSE')
+if resultado_teste[0].any() == 0:
+    print('Esta radiografia apresenta características compatíveis com DERRAME PLEURAL.')
+elif resultado_teste[0].any() == 1:
+    print('Esta radiografia apresenta as estruturas do Tórax sem alterações significativas.')
+elif resultado_teste[0].any() == 2:
+    print('Esta radiografia apresenta características compatíveis com PNEUMONIA')
+elif resultado_teste[0].any() == 3:
+    print('Esta radiografia apresenta características compatíveis com TUBERCULOSE')
 else:
-    print('Resultado impreciso demais para ser considerado')
+    print('A imagem fornecida não cumpre os requisitos mínimos para ser processada,')
+    print('ou o resultado do processamento da mesma é inconclusivo.')
