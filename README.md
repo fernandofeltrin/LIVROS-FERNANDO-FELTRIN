@@ -1,5 +1,5 @@
 # Ciencia-de-Dados-e-Aprendizado-de-Maquina
-Exemplos utilizados no livro Ciência de Dados e Aprendizado de Máquina de minha autoria.
+Exemplos utilizados nos livros Ciência de Dados e Aprendizado de Máquina / Redes Neurais Artificiais de minha autoria.
 
 LIVROS
 
