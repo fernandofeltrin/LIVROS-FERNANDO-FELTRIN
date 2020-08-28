@@ -27,7 +27,7 @@ https://www.udemy.com/course/python-do-zero-a-poo/?referralCode=1E35B0F2DA826655
 
 FACEBOOK
 
-https://www.facebook.com/pythondozeroapoo/
+https://www.facebook.com/fernandofeltrinpython/
 
 
 LINKEDIN
