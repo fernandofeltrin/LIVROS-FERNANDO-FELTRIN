@@ -1,4 +1,4 @@
-# Ciencia-de-Dados-e-Aprendizado-de-Maquina
+# REDES NEURAIS ARTIFICIAIS
 Exemplos utilizados nos livros Ciência de Dados e Aprendizado de Máquina / Redes Neurais Artificiais de minha autoria.
 
 LIVROS
