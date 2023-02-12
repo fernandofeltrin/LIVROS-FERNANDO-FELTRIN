@@ -1,0 +1,101 @@
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
+from keras.models import Sequential
+from keras.layers import Dense
+from sklearn.model_selection import cross_val_score
+from keras.wrappers.scikit_learn import KerasRegressor
+
+base = pd.read_csv('autos.csv', encoding = 'ISO-8859-1')
+
+base = base.drop('dateCrawled', axis=1)
+base = base.drop('dateCreated', axis=1)
+base = base.drop('nrOfPictures', axis=1)
+base = base.drop('postalCode', axis=1)
+base = base.drop('lastSeen', axis=1)
+base = base.drop('name', axis=1)
+base = base.drop('seller', axis=1)
+base = base.drop('offerType', axis=1)
+
+varTeste1 = base.loc[base.price <= 10]
+base = base[base.price > 10]
+varTeste2 = base.loc[base.price > 350000]
+base = base[base.price < 350000]
+
+base.loc[pd.isnull(base['vehicleType'])]
+base['vehicleType'].value_counts()
+base.loc[pd.isnull(base['gearbox'])]
+base['gearbox'].value_counts()
+base.loc[pd.isnull(base['model'])]
+base['model'].value_counts()
+base.loc[pd.isnull(base['fuelType'])]
+base['fuelType'].value_counts()
+base.loc[pd.isnull(base['notRepairedDamage'])]
+base['notRepairedDamage'].value_counts()
+
+valores_medios = {'vehicleType': 'limousine',
+                  'gearbox': 'manuell',
+                  'model': 'golf',
+                  'fuelType': 'benzin',
+                  'notRepairedDamage': 'nein'}
+
+base = base.fillna(value = valores_medios)
+entradas = base.iloc[:, 1:13].values
+saidas = base.iloc[:, 0].values
+
+labelencoder = LabelEncoder()
+entradas[:,0] = labelencoder.fit_transform(entradas[:,0])
+entradas[:,1] = labelencoder.fit_transform(entradas[:,1])
+entradas[:,3] = labelencoder.fit_transform(entradas[:,3])
+entradas[:,5] = labelencoder.fit_transform(entradas[:,5])
+entradas[:,8] = labelencoder.fit_transform(entradas[:,8])
+entradas[:,9] = labelencoder.fit_transform(entradas[:,9])
+entradas[:,10] = labelencoder.fit_transform(entradas[:,10])
+
+onehotencoder = OneHotEncoder(categorical_features = [0,1,3,5,8,9,10])
+entradas = onehotencoder.fit_transform(entradas).toarray()
+
+regressor = Sequential()
+regressor.add(Dense(units = 158,
+                    activation = 'relu',
+                    input_dim = 316))
+regressor.add(Dense(units = 158,
+                    activation = 'relu'))
+regressor.add(Dense(units = 1,
+                    activation = 'linear'))
+regressor.compile(loss = 'mean_absolute_error',
+                  optimizer = 'adam',
+                  metrics = ['mean_absolute_error'])
+regressor.fit(entradas,
+              saidas,
+              batch_size = 300,
+              epochs = 100)
+
+previsoes = regressor.predict(entradas)
+saidas.mean()
+previsoes.mean()
+
+def regressorValCruzada():
+    regressorV = Sequential()
+    regressorV.add(Dense(units = 158,
+                         activation = 'relu',
+                         input_dim = 316))
+    regressorV.add(Dense(units = 158,
+                         activation = 'relu'))
+    regressorV.add(Dense(units = 1,
+                         activation = 'linear'))
+    regressorV.compile(loss = 'mean_absolute_error',
+                       optimizer = 'adam',
+                       metrics = ['mean_absolute_error'])
+    return regressorV
+
+regValCruzada = KerasRegressor(build_fn = regressorValCruzada,
+                               epochs = 100,
+                               batch_size = 300)
+resValCruzada = cross_val_score(estimator = regValCruzada,
+                                X = entradas,
+                                y = saidas,
+                                cv = 10,
+                                scoring = 'neg_mean_absolute_error')
+media = resValCruzada.mean()
+desvioPadrao = resValCruzada.std()
