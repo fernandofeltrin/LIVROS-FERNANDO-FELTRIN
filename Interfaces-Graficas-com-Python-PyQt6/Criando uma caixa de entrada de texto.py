@@ -1,0 +1,37 @@
+import sys
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import QIcon
+
+class JanelaPrincipal(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Meu Programa') 
+        self.setWindowIcon(QIcon('icone.png'))
+        self.setGeometry(150, 150, 480, 320) 
+        self.Interface()
+
+    def Interface(self):
+        texto1 = QLabel('Login: ', self)
+        texto1.move(40, 50) 
+
+        botao1 = QPushButton('SAIR', self) 
+        botao1.move(100, 200)
+        botao1.clicked.connect(self.sair) 
+
+        self.caixa_texto1 = QLineEdit(self) 
+        self.caixa_texto1.move(90, 48)
+
+        texto2 = QLabel('Senha: ', self)
+        texto2.move(40, 74)
+
+        self.caixa_texto2 = QLineEdit(self)
+        self.caixa_texto2.move(90, 72)
+
+        self.show()
+
+    def sair(self):
+        sys.exit(qt.exec()) 
+
+qt = QApplication(sys.argv)
+app = JanelaPrincipal()
+sys.exit(qt.exec())
