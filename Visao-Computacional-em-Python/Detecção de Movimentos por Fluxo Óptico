@@ -1,0 +1,61 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+
+ret, first_frame  = cap.read()
+prev_gray = cv2.cvtColor(first_frame , cv2.COLOR_BGR2GRAY)
+
+mask = np.zeros_like(first_frame)
+
+mask[..., 1] = 255
+
+while True:    
+    ret, frame = cap.read()    
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    
+    flow = cv2.calcOpticalFlowFarneback(prev_gray, 
+                                        gray, 
+                                        None, 
+                                        pyr_scale = 0.5, 
+                                        levels = 3, 
+                                        winsize = 15, 
+                                        iterations = 3, 
+                                        poly_n = 5, 
+                                        poly_sigma = 1.1, 
+                                        flags = 0)
+    
+    magnitude, angle = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+ 
+    mask[..., 0] = angle * 180 / np.pi / 2    
+       
+    mask[..., 2] = cv2.normalize(magnitude,
+                                 None,
+                                 0,
+                                 255,
+                                 cv2.NORM_MINMAX)
+       
+    rgb = cv2.cvtColor(mask, cv2.COLOR_HSV2BGR)
+
+    dense_flow = cv2.addWeighted(frame, 1,rgb, 2, 0)    
+    
+    cv2.imshow("Dense optical flow", dense_flow)
+    prev_gray = gray    
+    if cv2.waitKey(10) & 0xFF == ord('q'):        
+        break
+        
+cap.release()
+cv2.destroyAllWindows()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

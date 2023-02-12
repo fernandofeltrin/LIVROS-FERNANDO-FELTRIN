@@ -1,0 +1,57 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+imagem9 = cv2.imread('mao.jpg', 0)
+
+fig = plt.figure(figsize=(10,8))
+ax1 = fig.add_subplot(121)
+
+plt.imshow(imagem9)
+plt.show()
+
+elem_elip2 = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                       (21,21))
+elem_elip3 = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                       (5,5))
+
+print(elem_elip2)
+print(elem_elip3)
+
+imgprocessada4 = cv2.morphologyEx(imagem9,
+                                  cv2.MORPH_GRADIENT,
+                                  elem_elip3)
+imgprocessada5 = cv2.morphologyEx(imagem9,
+                                  cv2.MORPH_TOPHAT,
+                                  elem_elip2)
+imgprocessada6 = cv2.morphologyEx(imagem9,
+                                  cv2.MORPH_BLACKHAT,
+                                  elem_elip2)
+
+fig = plt.figure(figsize=(8,20))
+ax1 = fig.add_subplot(221)
+plt.imshow(imagem9)
+plt.title('Imagem Original')
+ax2 = fig.add_subplot(222)
+plt.imshow(imgprocessada4)
+plt.title('Gradiente Morfológico')
+ax3 = fig.add_subplot(223)
+plt.imshow(imgprocessada5)
+plt.title('TopHat')
+ax4 = fig.add_subplot(224)
+plt.imshow(imgprocessada6)
+
+plt.title('BlackHat')
+plt.show()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

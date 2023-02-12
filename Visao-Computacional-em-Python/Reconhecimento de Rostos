@@ -1,0 +1,169 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+# Arquivo 1 - reconhecimento.py
+
+import cv2
+import dlib
+import numpy as np
+
+fonte = cv2.FONT_HERSHEY_COMPLEX_SMALL
+
+detector_faces = dlib.get_frontal_face_detector()
+detector_pontos = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+
+imagem = cv2.imread('stallone.jpg')
+faces = detector_faces(imagem, 2)
+
+def pontos_faciais(imagem, pontosFaciais):
+    for ponto in pontosFaciais.parts():
+        cv2.circle(imagem, (ponto.x, ponto.y), 2, (0,255,0), 2)
+    for num, coord in enumerate(pontosFaciais.parts()):
+        cv2.putText(imagem, str(num), (coord.x, coord.y), fonte, .55, (0,0,255), 1)
+
+def mascara(imagem, pontosFaciais):
+    linhas = [[0, 16, False], # queixo
+              [17, 21, False], # sobrancelha direita
+              [22, 26, False], # sobrancelha esquerda
+              [27, 30, False], # linha do nariz
+              [30, 35, True], # base do nariz
+              [36, 41, True], # olho esquerdo
+              [42, 47, True], # olho direito
+              [48, 59, True], # linha externa labio
+              [60, 67, True]] # linha interna labio
+    for lin in range(0, len(linhas)):
+        linha = []
+        for i in range(linhas[lin][0], linhas[lin][1] + 1):
+            pontoxy = [pontosFaciais.part(i).x, pontosFaciais.part(i).y]
+            linha.append(pontoxy)
+        linha = np.array(linha)
+        cv2.polylines(imagem, [linha], linhas[lin][2], (255,0,0), 2)
+
+for face in faces:
+    pontos = detector_pontos(imagem, face)
+    pontos_faciais(imagem, pontos)
+    mascara(imagem, pontos)
+    print(pontos.parts())
+
+cv2.imshow('Faces', imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+
+# Arquivo 2 - reconhecimento_treino.py
+
+import os
+import glob
+import _pickle as cPickle
+import dlib
+import cv2
+import numpy as np
+
+detector_faces = dlib.get_frontal_face_detector()
+detector_pontos = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+reconhecimento_facial = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
+
+indice = {}
+idx = 0
+descritores = None
+
+for data in glob.glob(os.path.join('img_treino', '*.jpg')):
+    imagem = cv2.imread(data)
+    faces_detectadas = detector_faces(imagem, 1)
+    num_faces_detectadas = len(faces_detectadas)
+    if num_faces_detectadas > 1:
+        print(f'ERRO: Mais de uma face na imagem {data}')
+        exit(0)
+    elif num_faces_detectadas < 1:
+        print(f'ERRO: Nenhuma face encontrada em {data}')
+        exit(0)
+
+    for face in faces_detectadas:
+        pontos_identificacao = detector_pontos(imagem, face)
+        caracteristicas = reconhecimento_facial.compute_face_descriptor(imagem,
+                                                                        pontos_identificacao)
+        lista_caracteristicas = [df for df in caracteristicas]
+        descritor_facial = np.asarray(lista_caracteristicas,
+                                      dtype=np.float64)
+        descritor_facial = descritor_facial[np.newaxis, :]
+        if descritores is None:
+            descritores = descritor_facial
+        else:
+            descritores = np.concatenate((descritores,
+                                          descritor_facial),
+                                         axis=0)
+
+        indice[idx] = data
+        idx += 1
+
+np.save("descritores.npy", descritores)
+with open("indices.pickle", 'wb') as f:
+    cPickle.dump(indice, f)
+
+
+
+# Arquivo 3 - reconhecimento_teste.py
+
+import os
+import glob
+import _pickle as cPickle
+import dlib
+import cv2
+import numpy as np
+
+detector_faces = dlib.get_frontal_face_detector()
+detector_pontos = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+reconhecimento_facial = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
+
+
+indices = np.load('indices.pickle', allow_pickle=True)
+descritores = np.load('descritores.npy')
+limiar = 0.5
+
+for data in glob.glob(os.path.join("img_teste", "*.jpg")):
+    imagem = cv2.imread(data)
+    faces = detector_faces(imagem, 1)
+    for face in faces:
+        e, t, d, b = (int(face.left()),
+                      int(face.top()),
+                      int(face.right()),
+                      int(face.bottom()))
+        pontos = detector_pontos(imagem, face)
+        descritor = reconhecimento_facial.compute_face_descriptor(imagem,
+                                                                  pontos)
+        lista_caracteristicas = [fd for fd in descritor]
+        array_descritor = np.asarray(lista_caracteristicas,
+                                     dtype=np.float64)
+        array_descritor = array_descritor[np.newaxis, :]
+
+        pontos_coincidentes = np.linalg.norm(array_descritor - descritores,
+                                             axis=1)
+        print(f'Margem de Coincidência: {pontos_coincidentes}')
+        minimo_permitido = np.argmin(pontos_coincidentes)
+        print(minimo_permitido)
+        margem_minima_permitida = pontos_coincidentes[minimo_permitido]
+        print(margem_minima_permitida)
+
+        if margem_minima_permitida <= limiar:
+            nome = os.path.split(indices[minimo_permitido])[1].split(".")[0]
+        else:
+            nome = ' '
+
+        cv2.rectangle(imagem, (e, t), (d, b), (0, 255, 255), 2)
+        texto = "{} {:.4f}".format(nome, margem_minima_permitida)
+        cv2.putText(imagem, texto, (d, t), cv2.FONT_HERSHEY_TRIPLEX, 0.7, (0, 255, 255))
+
+    cv2.imshow("Face Detectada", imagem)
+    cv2.waitKey(0)
+
+cv2.destroyAllWindows()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

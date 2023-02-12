@@ -1,0 +1,43 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+
+imagem = cv2.imread('circle.JPG', 0)
+
+momentos = cv2.moments(imagem)
+
+print(len(momentos))
+print(momentos)
+
+area = momentos['m00']
+
+print(area)
+
+mediaX = momentos['m10'] / area
+mediaY = momentos['m01'] / area
+
+print(mediaX)
+print(mediaY)
+
+centroideX = int(momentos['m10'] / momentos['m00'])
+centroideY = int(momentos['m01'] / momentos['m00'])
+
+print(centroideX)
+print(centroideY)
+
+# Momentos invariantes de Hu
+
+momentosHu = cv2.HuMoments(momentos)
+
+print(momentosHu.flatten())
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

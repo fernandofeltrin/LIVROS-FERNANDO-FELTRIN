@@ -1,0 +1,67 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+!git clone https://github.com/AliaksandrSiarohin/first-order-model
+cd first-order-model
+
+import imageio
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from skimage.transform import resize
+from IPython.display import HTML
+import warnings
+warnings.filterwarnings("ignore")
+
+source_image = imageio.imread('02.png')
+driving_video = imageio.mimread('04.mp4')
+
+source_image = resize(source_image, (256, 256))[..., :3]
+driving_video = [resize(frame, (256, 256))[..., :3] for frame in driving_video]
+
+def display(source, driving, generated=None):
+    fig = plt.figure(figsize=(8 + 4 * (generated is not None), 6))
+
+    ims = []
+    for i in range(len(driving)):
+        cols = [source]
+        cols.append(driving[i])
+        if generated is not None:
+            cols.append(generated[i])
+        im = plt.imshow(np.concatenate(cols, axis=1), animated=True)
+        plt.axis('off')
+        ims.append([im])
+
+    ani = animation.ArtistAnimation(fig, ims, interval=50, repeat_delay=1000)
+    plt.close()
+    return ani
+    
+HTML(display(source_image, driving_video).to_html5_video())
+
+from demo import load_checkpoints
+generator, kp_detector = load_checkpoints(config_path='config/vox-256.yaml', 
+                            checkpoint_path='/vox-cpk.pth.tar')
+                           
+from demo import make_animation
+from skimage import img_as_ubyte
+
+predictions = make_animation(source_image, driving_video, generator, kp_detector, relative=True)
+
+imageio.mimsave('../generated.mp4', [img_as_ubyte(frame) for frame in predictions])
+
+HTML(display(source_image, driving_video, predictions).to_html5_video())
+
+predictions = make_animation(source_image, driving_video, generator, kp_detector, relative=False, adapt_movement_scale=True)
+HTML(display(source_image, driving_video, predictions).to_html5_video())
+
+!ffmpeg -i /content/gdrive/My\ Drive/first-order-motion-model/07.mkv -ss 00:08:57.50 -t 00:00:08 -filter:v "crop=600:600:760:50" -async 1 hinton.mp4
+
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

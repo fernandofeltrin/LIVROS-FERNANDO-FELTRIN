@@ -1,0 +1,76 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import time
+from imutils.video import VideoStream
+import matplotlib.pyplot as plt
+
+captura = VideoStream(src = 0).start()
+time.sleep(1.0)
+captura = cv2.VideoCapture(0)
+ok, frame = captura.read()
+
+bbox = cv2.selectROI(frame, False)
+x, y, l ,a = bbox
+identificador = (x, y, l, a)
+print(identificador)
+
+roi = frame[y: y + a, x: x + l]
+cor_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+cv2.imshow('Regiao de Interesse em HSV', cor_roi)
+
+histograma_roi = cv2.calcHist([cor_roi],
+                              [0],
+                              None,
+                              [180],
+                              [0,180])
+histograma_roi = cv2.normalize(histograma_roi,
+                               histograma_roi,
+                               0,
+                               255,
+                               cv2.NORM_MINMAX)
+crit_termino = (cv2.TermCriteria_EPS | cv2.TermCriteria_COUNT,
+                10,
+                1)
+
+plt.hist(roi.ravel(), 180, [0,180])
+plt.show()
+
+cv2.imshow('Regiao de Interesse', roi)
+cv2.waitKey(0)
+
+while True:
+    ok, frame = captura.read()
+    if ok == True:
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        densidade = cv2.calcBackProject([hsv],
+                                        [0],
+                                        histograma_roi,
+                                        [0, 180],
+                                        1)
+        ok, rastreio = cv2.meanShift(densidade,
+                                     (x, y, l, a),
+                                     crit_termino)
+        x, y, l, a = rastreio
+        cv2.rectangle(frame, (x, y), (x+l, y+a), (0,255,0), 2)
+        cv2.imshow('Rastreamento', frame)
+        cv2.imshow('Densidade', densidade)
+        cv2.imshow('Regiao de Interesse', roi)
+
+        if cv2.waitKey(1) == 27:
+            break
+    else:
+        break
+
+cv2.destroyAllWindows()
+captura.release()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

@@ -1,0 +1,65 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+
+captura = cv2.VideoCapture(0)
+
+pontoinicial = (0,0)
+pontofinal = (0,0)
+
+topLeftClicked = False
+bottomRightClicked = False
+
+def desenha_retangulo(event, x, y, flags, params):
+  global pontoinicial, pontofinal, topLeftClicked, bottomRightClicked
+
+  if event == cv2.EVENT_LBUTTONDOWN:
+    if topLeftClicked == True and bottomRightClicked == True:
+      pontoinicial = (0,0)
+      pontofinal = (0,0)
+      topLeftClicked = False
+      bottomRightClicked = False
+    
+    if topLeftClicked == False:
+      pontoinicial = (x,y)
+      topLeftClicked = True
+    elif bottomRightClicked == False:
+      pontofinal = (x,y)
+      bottomRightClicked = True
+
+cv2.namedWindow('Teste')
+cv2.setMouseCallback('Teste', desenha_retangulo)
+
+while True:
+  ret, frame = captura.read()
+
+  if topLeftClicked:
+    cv2.circle(frame,
+               center = pontoinicial,
+               radius = 4,
+               color = (0,0,255))
+  
+  if topLeftClicked and bottomRightClicked:
+    cv2.rectangle(frame,
+                  pontoinicial,
+                  pontofinal,
+                  color = (0,0,255),
+                  thickness = 1)
+  
+  cv2.imshow('Teste', frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+      break
+
+captura.release()
+cv2.destroyAllWindows()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

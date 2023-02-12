@@ -1,0 +1,45 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import matplotlib.pyplot as plt
+
+classificador_faces = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+classificador_olhos = cv2.CascadeClassifier('haarcascade_eye.xml')
+
+imagem = cv2.imread('criancas.jpg')
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+
+faces = classificador_faces.detectMultiScale(imagem_cinza)
+
+for [x, y, l, a] in faces:
+  imagem = cv2.rectangle(imagem,
+                         (x,y),
+                         (x + l, y + a),
+                         (0,0,255),
+                         2)
+  regiao = imagem[y:y+a, x:x+l]
+  regiao_cinza = cv2.cvtColor(regiao, cv2.COLOR_BGR2GRAY)
+  olhos_detectados = classificador_olhos.detectMultiScale(regiao_cinza)
+
+  print(olhos_detectados)
+
+  for [ox, oy, ol, oa] in olhos_detectados:
+    cv2.rectangle(regiao,
+                  (ox, oy),
+                  (ox+ol, oy+oa),
+                  (255,0,0),
+                  2)
+ 
+fig = plt.figure(figsize=(10,8))
+
+plt.imshow(imagem)
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

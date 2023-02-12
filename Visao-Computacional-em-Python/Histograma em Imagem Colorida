@@ -1,0 +1,39 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+imagem2 = cv2.imread('stephenh.jpg')
+
+azul, verde, vermelho = cv2.split(imagem2)
+
+plt.imshow(imagem2)
+
+fig = plt.figure(figsize=(20,5))
+
+ax1 = fig.add_subplot(131) #1 linha, 3 colunas, referente a primeira imagem
+ax1.hist(azul.ravel(), 256, [0,256])
+plt.title('Histograma da cor Azul')
+
+ax2 = fig.add_subplot(132)
+ax2.hist(verde.ravel(), 256, [0,256])
+plt.title('Histograma da cor Verde')
+
+ax3 = fig.add_subplot(133)
+ax3.hist(vermelho.ravel(), 256, [0,256])
+plt.title('Histograma da cor Vermelho')
+
+plt.show()
+
+
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

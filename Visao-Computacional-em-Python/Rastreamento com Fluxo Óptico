@@ -1,0 +1,61 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+
+criterios = cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT
+
+captura = cv2.VideoCapture("pessoas.mp4")
+
+parametros1 = dict(maxCorners = 50,
+                   qualityLevel = 0.3,
+                   minDistance = 7)
+parametros2 = dict(winSize = (15, 15),
+                   maxLevel = 2,
+                   criteria = (criterios, 10, 0.03))
+
+canais = np.random.randint(0, 255, (100, 3))
+ok, frame = captura.read()
+frame_cinza = cv2.cvtColor(frame,
+                           cv2.COLOR_BGR2GRAY)
+cantos = cv2.goodFeaturesToTrack(frame_cinza,
+                                 mask = None,**parametros1)
+mascara = np.zeros_like(frame)
+
+while True:
+    ok, frame = captura.read()
+    img_cinza = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cantos2, status, erros = cv2.calcOpticalFlowPyrLK(frame_cinza,
+                                                      img_cinza,
+                                                      cantos,
+                                                      None,
+                                                      **parametros2)
+    novas_arestas = cantos2[status == 1]
+    velhas_arestas = cantos[status == 1]
+
+    for i, (novas, velhas) in enumerate(zip(novas_arestas, velhas_arestas)):
+        a, b = novas.ravel()
+        c, d = velhas.ravel()
+        mascara = cv2.line(mascara, (a, b), (c, d), canais[i].tolist(), 2)
+        frame = cv2.circle(frame, (a,b), 5, canais[i].tolist(), -1)
+
+    img = cv2.add(frame, mascara)
+    cv2.imshow('Fluxo Optico', img)
+    if cv2.waitKey(1) == 13:
+        break
+
+    frame_cinza = img_cinza.copy()
+    cantos = novas_arestas.reshape(-1, 1, 2)
+
+cv2.destroyAllWindows()
+captura.release()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

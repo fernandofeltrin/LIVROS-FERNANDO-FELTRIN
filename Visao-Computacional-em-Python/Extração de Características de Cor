@@ -1,0 +1,52 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+imgcolorida = cv2.imread('bola.jpg', 1)
+imgcinza = cv2.cvtColor(imgcolorida, cv2.COLOR_BGR2GRAY)
+#imgcinza = cv2.imread('bola.jpg', 0)
+
+fig = plt.figure(figsize=(20,5))
+
+ax1 = fig.add_subplot(121)
+plt.imshow(imgcolorida)
+plt.title('Imagem Colorida')
+
+ax2 = fig.add_subplot(122)
+plt.imshow(imgcinza)
+plt.title('Imagem Preto e Branco')
+
+plt.show()
+
+valmedia = cv2.mean(imgcolorida)
+valmediacinza = cv2.mean(imgcinza)
+
+print(valmedia)
+print(valmediacinza)
+
+(media, std) = cv2.meanStdDev(imgcolorida)
+(mediacz, stdcz) = cv2.meanStdDev(imgcinza)
+
+print(media, std)
+print(mediacz, stdcz)
+
+RGB = np.concatenate([(media, std)]).flatten() #Desvio padrão colorido
+GRAY = np.concatenate([(mediacz, stdcz)]).flatten() #desvio padrão cinza
+
+print(valmedia)
+print(RGB)
+
+print(valmediacinza)
+print(GRAY)
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

@@ -1,0 +1,31 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+from matplotlib import pyplot as plt
+from skimage.io import imread
+from skimage.color import rgb2gray
+from skimage.feature import corner_harris, corner_subpix, corner_peaks
+
+image = imread('hospital2.jpg')
+image = rgb2gray(image)
+
+corners = corner_harris(image)
+coords = corner_peaks(corners, min_distance=5)
+coords_subpix = corner_subpix(image, coords, window_size=13)
+
+fig, ax = plt.subplots()
+ax.imshow(image, interpolation='nearest', cmap=plt.cm.gray)
+ax.plot(coords[:, 1], coords[:, 0], '.b', markersize=3)
+ax.plot(coords_subpix[:, 1], coords_subpix[:, 0], '+r', markersize=15)
+ax.axis((0, 350, 350, 0))
+
+plt.show()
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV

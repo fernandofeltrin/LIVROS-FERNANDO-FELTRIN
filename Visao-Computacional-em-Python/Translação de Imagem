@@ -1,0 +1,34 @@
+# Livro VISÃO COMPUTACIONAL EM PYTHON - FERNANDO FELTRIN https://www.amazon.com.br/dp/B08NTW8TNV
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Translação desloca a imagem em relação a sua posição inicial
+
+imagem = cv2.imread('einstein.jpg', 0)
+
+linhas, colunas = imagem.shape
+
+print(linhas)
+print(colunas)
+
+matriz_translacao = np.float32([[1,0,100],[0,1,100]])
+#100 pixels na horizontal e 100 pixels na vertical
+
+imagem_deslocada = cv2.warpAffine(imagem,
+                                  matriz_translacao,
+                                  (colunas, linhas))
+
+fig = plt.figure(figsize=(10,8))
+plt.imshow(imagem_deslocada, cmap=plt.cm.gray)
+
+# Livro Python do ZERO à Programação Orientada a Objetos - https://www.amazon.com.br/dp/B07P2VJVW5
+# Livro Programação Orientada a Objetos com Python - https://www.amazon.com.br/dp/B083ZYRY9C
+# Livro Tópicos Avançados em Python - https://www.amazon.com.br/dp/B08FBKBC9H
+# Livro Ciência de Dados e Aprendizado de Máquina - https://www.amazon.com.br/dp/B07X1TVLKW
+# Livro Inteligência Artificial com Python - Redes Neurais Intuitivas - https://www.amazon.com.br/dp/B087YSVVXW
+# Livro Redes Neurais Artificiais - https://www.amazon.com.br/dp/B0881ZYYCJ
+# Livro Análise Financeira com Python - https://www.amazon.com.br/dp/B08B6ZX6BB
+# Livro Arrays com Python + Numpy - https://www.amazon.com.br/dp/B08BTN6V7Y
+# Livro Visão Computacional em Python - https://www.amazon.com.br/dp/B08NTW8TNV
