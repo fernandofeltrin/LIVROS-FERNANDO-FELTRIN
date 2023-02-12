@@ -1,0 +1,113 @@
+import numpy as np
+import pandas as pd
+from pandas_datareader import data as wb
+import matplotlib.pyplot as plt
+data = wb.DataReader('PG', data_source='yahoo', start='2000-1-1')
+
+data.head()
+data.tail()
+
+data['Resultado'] = (data['Adj Close'] / data['Adj Close'].shift(1)) -1
+print(data['Resultado'])
+
+data.head()
+
+data['Resultado'].plot(figsize=(8,5))
+plt.show()
+
+media_simples = data['Resultado'].mean()
+print(media_simples)
+
+media_anual = data['Resultado'].mean() * 250
+print(media_anual)
+print(str(round(media_anual, 5)*100)+'%')
+
+data['RetLogaritmico'] = np.log(data['Adj Close'] / data['Adj Close'].shift(1))
+print(data['RetLogaritmico'])
+
+data['RetLogaritmico'].plot(figsize = (8,5))
+plt.show()
+
+medialog = data['RetLogaritmico'].mean() * 250
+print(str(round(medialog, 5) * 100) + '%')
+
+carteiras = ['PG', 'MSFT', 'F', 'GE', 'AAPL']
+database = pd.DataFrame()
+
+for i in carteiras:
+  database[i] = wb.DataReader(i, data_source='yahoo', start='2000-1-1')['Adj Close']
+
+database.info()
+database.head()
+database.tail()
+
+database.iloc[0]
+
+(database / database.iloc[0] * 100).plot(figsize = (8,5))
+
+ret_carteiras = (database / database.shift(1)) -1
+ret_carteiras.head()
+
+pesos = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+np.dot(ret_carteiras, pesos)
+
+mediacarteiras = ret_carteiras.mean() * 100
+print(mediacarteiras)
+
+mediaretornoanual = ret_carteiras.mean() * 250
+print(mediaretornoanual)
+
+np.dot(mediaretornoanual, pesos)
+
+portfolio = str(round(np.dot(mediaretornoanual, pesos), 5) * 100) + '%'
+print(portfolio)
+
+pesos2 = np.array([0.3, 0.3, 0.15, 0.05, 0.2])
+portfolio2 = str(round(np.dot(mediaretornoanual, pesos2), 5) * 100) + '%'
+print(portfolio2)
+
+ind_carteiras = ['^GSPC', '^IXIC', '^GDAXI']
+indicadores = pd.DataFrame()
+
+for t in ind_carteiras:
+  indicadores[t] = wb.DataReader(t, data_source='yahoo', start='2000-1-1')['Adj Close']
+
+indicadores.head()
+indicadores.tail()
+
+(indicadores / indicadores.iloc[0] * 100).plot(figsize = (8,5))
+plt.show()
+
+retindicadores = (indicadores / indicadores.shift(1)) -1
+retindicadores.tail()
+
+retindicadoresanuais = retindicadores.mean() * 250
+print(retindicadoresanuais)
+
+carteiras = ['PG', 'AAPL']
+database = pd.DataFrame()
+
+for i in carteiras:
+  database[i] = wb.DataReader(i,
+                               data_source='yahoo',
+                               start='2010-1-1')['Adj Close']
+database.tail()
+
+retorno = np.log(database / database.shift(1))
+print(retorno)
+
+retorno['PG'].mean()
+retorno['PG'].mean() * 250
+retorno['PG'].std()
+retorno['PG'].std() * 250 ** 0.5
+
+retorno['AAPL'].mean()
+retorno['AAPL'].mean() * 250
+retorno['AAPL'].std()
+retorno['AAPL'].std() * 250 ** 0.5
+
+print(f'Média PG', retorno['PG'].mean() * 250)
+print(f'Média AAPL', retorno['AAPL'].mean() * 250)
+
+print(f'Média entre PG e AAPL', retorno[['PG', 'AAPL']].mean() * 250)
+print(f'Desvio Padrão entre PG e AAPL', retorno[['PG', 'AAPL']].std() * 250 ** 0.5)
