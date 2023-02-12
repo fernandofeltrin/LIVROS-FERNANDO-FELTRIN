@@ -1,0 +1,31 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+imagem = cv2.imread('einstein.jpg', 0)
+
+imagem_escalonada = cv2.resize(imagem,
+                               None,
+                               fx = 0.4,
+                               fy = 0.4,
+                               interpolation = cv2.INTER_CUBIC)
+# fx e fy definem o percentual de escalonamento
+
+cv2_imshow(imagem4)
+cv2_imshow(imagem_escalonada)
+
+linhas, colunas = imagem_escalonada.shape
+
+print(linhas)
+print(colunas)
+
+largura = imagem.shape[1] 
+altura = imagem.shape[0] 
+proporcao = float(altura/largura) 
+
+largura_nova = 200
+altura_nova = int(largura_nova*proporcao) 
+
+fig = plt.figure(figsize=(8,5))
+plt.imshow(imagem,
+           cmap=plt.cm.gray)
