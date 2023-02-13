@@ -1,0 +1,16 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dbc.Row([
+        html.Div([
+            dbc.Tabs([
+                dbc.Tab(label = ''),
+                dbc.Tab(label = ''),
+                dbc.Tab(label = '')
+            ],
+            id = '')
+        ])
+    ])
+])
