@@ -1,0 +1,17 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
+
+app = dash.Dash()
+
+html.Div([
+    dcc.Input(value = '',
+              type = '',
+              id = '')
+])
+
+@app.callback(Output(component_id = '', component_property = ''),
+              Input(component_id = '', component_property = ''))
+def funcao(e):
+    return e
