@@ -1,0 +1,14 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dcc.Dropdown(
+        id = '',
+        options = [
+            {'label':'', 'value':''},
+            {'label':'', 'value':''},
+            {'label':'', 'value':''}
+        ]
+    )
+])
