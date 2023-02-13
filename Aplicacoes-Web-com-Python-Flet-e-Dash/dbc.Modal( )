@@ -1,0 +1,19 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dbc.Modal([
+        dbc.ModalHeader(
+            dbc.ModalTitle('')
+        ),
+        dbc.ModalBody([
+
+        ]),
+        dbc.ModalFooter([
+
+        ])
+    ],
+    id = '',
+    is_open = 'False')
+])
