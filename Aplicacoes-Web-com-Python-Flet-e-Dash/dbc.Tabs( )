@@ -6,9 +6,9 @@ html.Div([
     dbc.Row([
         html.Div([
             dbc.Tabs([
-                dbc.Tab(label = ''),
-                dbc.Tab(label = ''),
-                dbc.Tab(label = '')
+                dbc.Tab(label = '', tab_id = ''),
+                dbc.Tab(label = '', tab_id = ''),
+                dbc.Tab(label = '', tab_id = '')
             ],
             id = '')
         ])
