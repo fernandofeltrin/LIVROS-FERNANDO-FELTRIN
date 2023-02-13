@@ -1,0 +1,18 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dbc.Row(
+        dbc.Col(
+            html.Div([
+
+            ])
+        ),
+        dbc.Col(
+            html.Div([
+                
+            ])
+        )
+    )
+])
