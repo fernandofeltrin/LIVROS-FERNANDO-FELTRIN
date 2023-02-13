@@ -1,0 +1,22 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dbc.Accordion([
+        dbc.AccordionItem(
+            html.Div([
+
+            ]),
+            title = '',
+            item_id = ''),
+        dbc.AccordionItem(
+            html.Div([
+                
+            ]),
+            title = '',
+            item_id = '')],
+        id = '',
+        active_item = ''),
+    html.Div(id = '')
+    ])
