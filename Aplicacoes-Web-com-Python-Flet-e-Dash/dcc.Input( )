@@ -1,0 +1,9 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dcc.Input(value = '',
+              type = '',
+              id = '')
+])
