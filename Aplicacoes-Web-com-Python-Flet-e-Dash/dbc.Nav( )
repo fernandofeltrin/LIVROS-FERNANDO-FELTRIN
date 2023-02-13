@@ -1,0 +1,15 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+html.Div([
+    dbc.Nav([
+        dbc.NavLink(
+
+        ),
+        dbc.NavLink(
+            
+        )
+    ],
+    id = '')
+])
