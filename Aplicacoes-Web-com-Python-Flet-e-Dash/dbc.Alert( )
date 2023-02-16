@@ -1,0 +1,12 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+app.layout = html.Div([
+    html.Div([
+    dbc.Alert('',
+              color = '')
+])
+])
