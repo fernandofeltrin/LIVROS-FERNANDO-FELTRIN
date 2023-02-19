@@ -1,0 +1,39 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.Span(className="border"),
+    html.Span(className="border-top"),
+    html.Span(className="border-end"),
+    html.Span(className="border-bottom"),
+    html.Span(className="border-start"),
+    html.Span(className="border border-primary"),
+    html.Span(className="border border-secondary"),
+    html.Span(className="border border-success"),
+    html.Span(className="border border-danger"),
+    html.Span(className="border border-warning"),
+    html.Span(className="border border-info"),
+    html.Span(className="border border-light"),
+    html.Span(className="border border-dark"),
+    html.Span(className="border border-white"),
+    html.Span(className="border border-1"),
+    html.Span(className="border border-2"),
+    html.Span(className="border border-3"),
+    html.Span(className="border border-4"),
+    html.Span(className="border border-5"),
+    html.Span(className="border rounded-top"),
+    html.Span(className="border rounded-end"),
+    html.Span(className="border rounded-bottom"),
+    html.Span(className="border rounded-start"),
+    html.Span(className="border rounded-circle"),
+    html.Span(className="border rounded-pill"),
+    html.Span(className="border rounded-0"),
+    html.Span(className="border rounded-1"),
+    html.Span(className="border rounded-2"),
+    html.Span(className="border rounded-3"),
+])
+
+app.run()
