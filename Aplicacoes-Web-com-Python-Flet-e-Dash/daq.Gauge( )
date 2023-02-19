@@ -1,0 +1,10 @@
+import dash
+from dash import html, dcc
+from dash.dependencies import Input, Output, State
+import dash_bootstrap_components as dbc
+import dash_daq as daq
+
+html.Div([
+    daq.Gauge(id = '',
+          value = 0)
+])
