@@ -1,0 +1,12 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.P("bg-primary", className="bg-primary text-white"),
+    html.P("bg-primary bg-gradient", className="bg-primary bg-gradient text-white")
+])
+
+app.run()
