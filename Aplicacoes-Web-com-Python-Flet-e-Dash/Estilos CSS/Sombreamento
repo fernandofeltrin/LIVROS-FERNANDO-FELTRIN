@@ -1,0 +1,14 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.Div("No shadow", className="shadow-none p-3 mb-5 bg-light rounded"),
+    html.Div("Small shadow", className="shadow-sm p-3 mb-5 bg-white rounded"),
+    html.Div("Regular shadow", className="shadow p-3 mb-5 bg-white rounded"),
+    html.Div("Larger shadow", className="shadow-lg p-3 mb-5 bg-white rounded")
+])
+
+app.run()
