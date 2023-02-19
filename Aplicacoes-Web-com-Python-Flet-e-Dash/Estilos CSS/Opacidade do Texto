@@ -1,0 +1,14 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.Div("default", className="text-primary p-2"),
+    html.Div("75% opacity", className="opacity-75 text-primary p-2"),
+    html.Div("50% opacity", className="opacity-50 text-primary p-2"),
+    html.Div("25% opacity", className="opacity-25 text-primary p-2")
+])
+
+app.run()
