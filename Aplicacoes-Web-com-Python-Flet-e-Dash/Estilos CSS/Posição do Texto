@@ -1,0 +1,20 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.Div("Float start on all viewport sizes", className="float-start"),
+    html.Div("Float end on all viewport sizes", className="float-end"),
+    html.Div("Don't float on all viewport sizes", className="float-none"),
+    html.Span("baseline", className="align-baseline"),
+    html.Span("top", className="align-top"),
+    html.Span("middle", className="align-middle"),
+    html.Span("bottom", className="align-bottom"),
+    html.Span("text-top", className="align-text-top"),
+    html.Span("text-bottom", className="align-text-bottom")
+])
+
+app.run()
+
