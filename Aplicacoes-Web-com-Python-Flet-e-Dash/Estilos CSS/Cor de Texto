@@ -1,0 +1,18 @@
+import dash
+from dash import html, dcc
+import dash_bootstrap_components as dbc
+
+app = dash.Dash()
+
+app.layout = dbc.Container([
+    html.P("text-primary", className="text-primary"),
+    html.P("text-secondary", className="text-secondary"),
+    html.P("text-success", className="text-success"),
+    html.P("text-danger", className="text-danger"),
+    html.P("text-warning", className="text-warning"),
+    html.P("text-info", className="text-info"),
+    html.P("text-light", className="text-light"),
+    html.P("text-dark", className="text-dark")
+])
+
+app.run()
