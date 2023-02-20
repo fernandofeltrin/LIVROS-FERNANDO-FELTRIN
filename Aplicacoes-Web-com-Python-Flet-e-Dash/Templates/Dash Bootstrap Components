@@ -1,0 +1,354 @@
+import pandas as pd
+import dash
+import dash_bootstrap_components as dbc
+from dash import html, dcc
+import dash_bootstrap_components.themes as dbc_themes
+from dash import Dash
+
+df = pd.DataFrame()
+
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+app.layout = dbc.Container([
+    dbc.Row([
+        html.H1('Dash Bootstrap Components'),
+        html.Br(),
+        
+        html.Label('Accordion'),
+        dbc.Col([
+            dbc.Accordion([dbc.AccordionItem([
+                html.P('Conteúdo do bloco 1'),
+            ],
+            title = 'Item 1',
+            id = 'item_01'),
+            dbc.AccordionItem([
+                html.P('Conteúdo do bloco 2'),
+            ],
+            title = 'Item 2',
+            id = 'item_02')],
+            start_collapsed = True,
+            flush = True,
+            id = 'accordion',
+            always_open = False),
+        html.Br(),
+
+        html.Label('Alert'),
+        dbc.Alert(['Texto da mensagem de alerta'],
+                  color = 'danger',
+                  dismissable = True,
+                  is_open = True,
+                  fade = True,
+                  duration = 40000),
+        html.Br(),
+
+        html.Label('Breadcrumb'),
+        dbc.Breadcrumb(items = [{'label':'Google', 'href':'www.google.com.br', 'external_link':True},
+                                {'label':'Bing', 'href':'www.bing.com.br', 'external_link':True}]),
+        html.Br(),
+
+        html.Label('Button'),
+        dbc.Button('Botão 1',
+                   id = 'botao_01',
+                   n_clicks = 0,
+                   color = 'primary',
+                   outline = False,
+                   disabled = False,
+                   size = 'sm'),
+        html.Br(),
+
+        dbc.Button(['Notificações ',
+                    dbc.Badge('9',
+                              color = 'light',
+                              text_color = 'primary',
+                              pill = False)],
+                    id = 'botao_n01',
+                    n_clicks = 0),
+        html.Br(),
+
+        dbc.Button('Download',
+                   id = 'download_01',
+                   n_clicks = 0,
+                   color = 'primary',
+                   outline = False,
+                   disabled = False,
+                   size = 'sm',
+                   href = '/arquivo.docx',
+                   download = 'arquivo.txt',
+                   external_link = True),
+        html.Br(),
+
+        html.Label('ButtonGroup'),
+        dbc.ButtonGroup([
+            dbc.Button('Botao A',
+                       id = 'botao_a',
+                       n_clicks = 0),
+            dbc.Button('Botao B',
+                       id = 'botao_b',
+                       n_clicks = 0),
+            dbc.Button('Botao C',
+                       id = 'botao_c',
+                       n_clicks = 0)],
+                size = 'sm',
+                vertical = False),
+        html.Br(),
+
+        dbc.ButtonGroup([
+            dbc.DropdownMenu([
+                dbc.DropdownMenuItem('Item 1'),
+                dbc.DropdownMenuItem('Item 2')],
+                    label = 'Menu 1',
+                    group = True),
+            dbc.DropdownMenu([
+                dbc.DropdownMenuItem('Item A'),
+                dbc.DropdownMenuItem('Item B')],
+                    label = 'Menu 2',
+                    group = True)]),
+        html.Br(),
+
+        dbc.ButtonGroup([
+            dbc.RadioItems(id = 'radio_01',
+                           options = [{'label':'Opção 1', 'value':1},
+                                      {'label':'Opção 2', 'value':2}],
+                           value = 1)],
+                           size = 'lg'),
+        html.Br(),
+
+        html.Label('Card'),
+        dbc.Card([
+            dbc.CardHeader('Título do card'),
+            dbc.CardImg(src = 'https://icons.veryicon.com/32/Avatar/People/User.png',
+                        top = True),
+            dbc.CardBody([html.P('Conteúdo do card')]),
+            dbc.CardLink('Google',
+                         href = 'https://google.com'),
+            dbc.CardFooter('Rodapé do card')],
+                color = 'info',
+                outline = False),
+        html.Br(),
+
+        dbc.Card([
+            dbc.CardHeader('Título do card'),
+            dbc.CardImg(src = 'https://icons.veryicon.com/32/Avatar/People/User.png',
+                        top = True),
+            dbc.CardImgOverlay(
+                dbc.CardBody([
+                html.P('Conteúdo do card'),
+            dbc.CardLink('Google',
+                         href = 'https://google.com')])),
+            dbc.CardFooter('Rodapé do card')],
+                color = 'info',
+                outline = True),
+        html.Br(),
+
+        dbc.Card(
+            dbc.ListGroup([
+                dbc.ListGroupItem('texto bloco 1'),
+                dbc.ListGroupItem('texto bloco 2'),
+                dbc.ListGroupItem('texto bloco 3')],
+                    flush = True),
+            color = 'primary'),
+        html.Br(),
+
+        html.Label('CardGroup'),
+        dbc.CardGroup([
+            dbc.Card(
+                dbc.CardBody([
+                    html.P('Conteúdo do card esquerdo')])),
+            dbc.Card(
+                dbc.CardBody([
+                    html.P('Conteúdo do card central')])),
+            dbc.Card(
+                dbc.CardBody([
+                    html.P('Conteúdo do card direito')]))]),
+        html.Br(),
+
+        html.Label('DropdownMenu'),
+        dbc.DropdownMenu(label = 'Menu Dropdown',
+                         color = 'primary',
+                         size = 'md',
+                         direction = 'down',
+                         children = [dbc.DropdownMenuItem('Item nº 1',
+                                                          id = 'item_d01',
+                                                          n_clicks = 0),
+                                     dbc.DropdownMenuItem(divider = True),
+                                     dbc.DropdownMenuItem('Item nº 2',
+                                                          id = 'item_d02',
+                                                          n_clicks = 0),
+                                     dbc.DropdownMenuItem('Item nº 3',
+                                                          id = 'item_d03',
+                                                          n_clicks = 0)]),
+        html.Br(),
+
+        html.Label('Input'),
+        dbc.Input(id = 'entrada_01',
+                  placeholder = 'Digite o nome',
+                  type = 'text',
+                  size = 'md'),
+        dbc.FormText('Legenda para caixa de inserção de texto'),
+        html.Br(),
+
+        html.Label('FormFloating'),
+        dbc.FormFloating([
+            dbc.Input(type = 'email',
+                      id = 'entrada_email_01',
+                      placeholder = 'Digite o seu e-mail'),
+            dbc.Label('Digite o seu e-mail')]),
+        html.Br(),
+
+        html.Label('ListGroup'),
+        dbc.ListGroup([
+            dbc.ListGroupItem('Texto 001',
+                              active = True),
+            dbc.ListGroupItem('Texto 001',
+                              color = 'warning'),
+            dbc.ListGroupItem('Texto 001')],
+                flush = True),
+        html.Br(),
+
+        dbc.ListGroup([
+            dbc.ListGroupItem('Texto 001'),
+            dbc.ListGroupItem('Texto 001'),
+            dbc.ListGroupItem('Texto 001')],
+                flush = True,
+                numbered = True),
+        html.Br(),
+
+        html.Label('Modal'),
+        dbc.Modal([
+            dbc.ModalHeader(
+                    dbc.ModalTitle('Cabeçalho do Modal'),
+                        close_button = True),
+            dbc.ModalBody('Conteúdo do Modal'),
+            dbc.ModalFooter('Rodapé do Modal')],
+                id = 'modal',
+                size = 'xl',
+                is_open = False,
+                fullscreen = False,
+                scrollable = False,
+                centered = False),
+        html.Br(),
+
+        html.Label('Nav'),
+        dbc.Nav([
+            dbc.NavItem(
+                dbc.NavLink('Link 1',
+                            active = True,
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 2',
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 3',
+                            href = '#'))],
+                pills = True,
+                vertical = False),
+        html.Br(),
+
+        dbc.Nav([
+            dbc.NavItem(
+                dbc.NavLink('Link 1',
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 2',
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 3',
+                            href = '#'))],
+                pills = True,
+                vertical = True),
+        html.Br(),
+
+        html.Label('NavbarSimple'),
+        dbc.NavbarSimple([
+            dbc.NavItem(
+                dbc.NavLink('Link 1',
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 2',
+                            href = '#')),
+            dbc.NavItem(
+                dbc.NavLink('Link 3',
+                            href = '#'))],
+                        brand = 'Menu',
+                        brand_href = '#',
+                        color = 'primary',
+                        dark = True),
+        html.Br(),
+
+        html.Label('Pagination'),
+        dbc.Pagination(max_value = 5,
+                       size = 'sm',
+                       first_last = True,
+                       previous_next = True,
+                       fully_expanded = False,
+                       id = 'paginacao'),
+        html.Br(),
+
+        html.Label('Table'),
+        dbc.Table([
+            html.Thead(
+                html.Tr([
+                    html.Th('Primeira Coluna'),
+                    html.Th('Segunda Coluna'),
+                    html.Th('Terceira Coluna')])),
+            html.Tbody([
+                html.Tr([
+                    html.Td('Fernando'),
+                    html.Td('Belomé'),
+                    html.Td('Feltrin')])]),
+            html.Tbody([
+                html.Tr([
+                    html.Td('Alberto'),
+                    html.Td('Pereira'),
+                    html.Td('Feltrin')])])],
+                bordered = True,
+                dark = True,
+                hover = True,
+                responsive = True,
+                striped = True),
+        html.Br(),
+
+        dbc.Table.from_dataframe(df,
+                                 bordered = True,
+                                 dark = True,
+                                 hover = True,
+                                 responsive = True,
+                                 striped = True),
+        html.Br(),
+
+        html.Label('Tabs'),
+        dbc.Tabs([
+            dbc.Tab(label = 'Aba 01',
+                    tab_id = 'id_aba_01'),
+            dbc.Tab(label = 'Aba 02',
+                    tab_id = 'id_aba_02')],
+                active_tab = 'id_aba_01'),
+        html.Br(),
+
+        dbc.Card([
+            dbc.CardHeader(
+                dbc.Tabs([
+                    dbc.Tab(label = 'Aba 01',
+                            tab_id = 'id_aba_01'),
+                    dbc.Tab(label = 'Aba 02',
+                            tab_id = 'id_aba_02')],
+                        active_tab = 'id_aba_01')),
+            dbc.CardBody(html.P(id = 'conteudo_aba'))]),
+        html.Br(),
+
+        html.Label('Textarea'),
+        dbc.Textarea(id = 'entrada_t01',
+                     placeholder = 'Digite uma observação',
+                     size = 'md'),
+        html.Br(),
+
+        html.Label('Toast'),
+        dbc.Toast([
+            html.P('Conteúdo do cartão')],
+                header = 'Título do cartão'),
+        html.Br(),
+        ])
+    ]),
+]) 
+
+app.run_server(debug = True)
