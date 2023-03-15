@@ -1,0 +1,106 @@
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense, Flatten, Dropout
+from keras.layers.convolutional import Conv1D, MaxPooling1D
+from keras.wrappers.scikit_learn import KerasClassifier
+from keras.utils import np_utils
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import KFold
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size = 0.3,
+                                                    shuffle = True,
+                                                    random_state = 42)
+
+X_train = X_train.reshape((X_train.shape[0],
+                           X_train.shape[1], 1))
+X_test = X_test.reshape((X_test.shape[0],
+                         X_test.shape[1], 1))
+
+y_train = np_utils.to_categorical(y_train)
+y_test = np_utils.to_categorical(y_test)
+num_classes = y_test.shape[1]
+
+def create_model():
+    model = Sequential()
+    model.add(Conv1D(filters = 32,
+                     kernel_size = 2,
+                     activation = 'relu',
+                     input_shape = (X_train.shape[1], 1)))
+    model.add(Conv1D(filters = 64,
+                     kernel_size = 2,
+                     activation = 'relu'))
+    model.add(MaxPooling1D(pool_size = 2))
+    model.add(Flatten())
+    model.add(Dense(units = 128,
+                    activation = 'relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(num_classes,
+                    activation = 'softmax'))
+    model.compile(loss = 'categorical_crossentropy',
+                  optimizer = 'adam',
+                  metrics = ['accuracy'])
+    return model
+
+model = KerasClassifier(build_fn = create_model,
+                        epochs = 50,
+                        batch_size = 10,
+                        verbose = 0)
+
+models = [model, model, model, model]
+
+X_train_meta = np.zeros((len(X_train), len(models)))
+for i, model in enumerate(models):
+    y_pred = cross_val_predict(model,
+                               X_train,
+                               y_train,
+                               cv = KFold(n_splits = 5,
+                                          shuffle = True,
+                                          random_state = 42))
+    X_train_meta[:, i] = y_pred
+
+meta_model = Sequential()
+meta_model.add(Dense(units = 128,
+                     input_dim = X_train_meta.shape[1],
+                     activation = 'relu'))
+meta_model.add(Dense(num_classes,
+                     activation = 'softmax'))
+meta_model.compile(loss = 'categorical_crossentropy',
+                   optimizer = 'adam',
+                   metrics = ['accuracy'])
+
+meta_model.fit(X_train_meta,
+               y_train,
+               epochs = 50,
+               batch_size = 10,
+               verbose = 0)
+
+X_test_meta = np.zeros((len(X_test), len(models)))
+for i, model in enumerate(models):
+    model.fit(X_train,
+              y_train,
+              epochs = 50,
+              batch_size = 10,
+              verbose = 0)
+    y_pred = model.predict(X_test)
+    X_test_meta[:, i] = y_pred
+
+sample = X_test[0].reshape((1, X_test.shape[1], 1))
+
+X_sample_meta = np.zeros((1, len(models)))
+for i, model in enumerate(models):
+    y_pred = model.predict(sample)
+    X_sample_meta[:, i] = y_pred
+
+y_pred = meta_model.predict(X_sample_meta)
+
+prediction = np.argmax(y_pred)
+
+print(f"A amostra de teste é do tipo {iris.target_names[prediction]}")
