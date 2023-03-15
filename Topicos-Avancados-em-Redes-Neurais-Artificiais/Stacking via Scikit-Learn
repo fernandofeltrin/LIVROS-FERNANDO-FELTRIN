@@ -1,0 +1,52 @@
+import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import KFold
+
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size = 0.3,
+                                                    shuffle = True,
+                                                    random_state = 42)
+
+models = [LogisticRegression(random_state = 42),
+          RandomForestClassifier(random_state = 42),
+          GaussianNB(),
+          KNeighborsClassifier()]
+
+X_train_meta = np.zeros((len(X_train), len(models)))
+
+for i, model in enumerate(models):
+    y_pred = cross_val_predict(model,
+                               X_train,
+                               y_train,
+                               cv = KFold(n_splits = 5,
+                                          shuffle = True,
+                                          random_state = 42))
+    X_train_meta[:, i] = y_pred
+
+meta_model = LogisticRegression(random_state = 42)
+
+meta_model.fit(X_train_meta,
+               y_train)
+
+X_test_meta = np.zeros((len(X_test), len(models)))
+for i, model in enumerate(models):
+    model.fit(X_train,
+              y_train)
+    y_pred = model.predict(X_test)
+    X_test_meta[:, i] = y_pred
+
+y_pred = meta_model.predict(X_test_meta)
+
+accuracy = accuracy_score(y_test, y_pred)
+print('Acurácia final:', accuracy)
