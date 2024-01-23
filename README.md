@@ -1,22 +1,4 @@
-## LIVROS PYTHON - FERNANDO FELTRIN
+[![](LivrosJan2024.jpg)]([https://www.exemplo.com](https://www.amazon.com.br/s?i=digital-text&rh=p_27%3AFernando+Feltrin&s=relevancerank&text=Fernando+Feltrin&ref=dp_byline_sr_ebooks_1))
 
-AMAZON
-
-https://www.amazon.com.br/Fernando-Feltrin/e/B09MVJBHJH/ref=dp_byline_cont_ebooks_1
-
------------------------------------------------------------------------------------
-
-
-UDEMY
-
-https://www.udemy.com/course/python-do-zero-a-poo/?referralCode=1E35B0F2DA8266558B42
-
-
-FACEBOOK
-
-https://www.facebook.com/fernandofeltrinpython/
-
-
-LINKEDIN
-
-https://www.linkedin.com/in/fernandofeltrin/
+## DISPONÍVEL EM
+## [https://www.amazon.com.br/dp/B08WRWZ4L1](https://www.amazon.com.br/stores/author/B09MVJBHJH/allbooks?ingress=0&visitId=89d44eb4-ba4e-4c1f-8da2-5b09a6ff9b3f&ref_=ap_rdr)
